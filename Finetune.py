@@ -203,7 +203,18 @@ peft_trainer.train()
 
 from peft import PeftModel, PeftConfig
 
-peft_model_base = AutoModelForSeq2SeqLM.from_pretrained("google")
+peft_model_base = AutoModelForSeq2SeqLM.from_pretrained("google/flan-t5-base", torch_dtype=torch.bfloat16)
+
+tokenizer = AutoTokenizer.from_pretrained("google/flan-t5-base")
+
+# Add the Lora weights
+peft_model = PeftModel.from_pretrained(
+                                    peft_model_base,
+                                    "./peft-dialogue-summary-checkpoint-from-s3",
+                                    torch_dtype=torch.bfloat16,
+                                    is_trainable=False
+)
+
 
 
 
